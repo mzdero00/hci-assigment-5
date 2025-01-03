@@ -19,10 +19,10 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | designmatters.",
-    default: "designmatters.",
+    template: "%s cayenne.",
+    default: "Cayenne - Car Rental Service",
   },
-  description: "A design agency that cares about your business.",
+  description: "car rental service",
 };
 
 export default function RootLayout({

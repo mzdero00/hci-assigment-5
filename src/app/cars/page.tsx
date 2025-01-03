@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getPosts, getPostsCount } from "./_lib/api";
 import type { Post } from "./_lib/api";
-import Pagination from "./_components/pagination";
 import Image from "next/image";
 
 type BlogPageProps = {
@@ -68,7 +67,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <h1 className="text-6xl font-extrabold tracking-tight mb-10 text-orange-500 text-outline">
         Cars
       </h1>
-      {/* <Pagination currentPage={currentPage} pagesCount={pagesCount} /> */}
       <ul className="gap-10 md:flex">{posts.map(processPost)}</ul>
     </main>
   );
