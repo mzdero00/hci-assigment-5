@@ -3,132 +3,93 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Logo from "./logo";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
-type Page = {
-  title: string;
-  path: `/${string}`;
-};
-
-// We hardcode pages here, but you could get this information from some external source (e.g. CMS, DB, config file, etc).
-const pages: Page[] = [
-  { title: "Home", path: "/" },
-  {
-    title: "Cars",
-    path: "/cars",
-  },
-  {
-    title: "Support",
-    path: "/support",
-  },
-
-  {
-    title: "About us",
-    path: "/about",
-  },
+const pages = [
+  { title: "Cars", path: "/cars" },
+  { title: "About Us", path: "/about" },
+  { title: "Support", path: "/support" },
+  { title: "Blog", path: "/blog" },
 ];
-
-function processPage(
-  page: Page,
-  index: number,
-  pathname: string,
-  onClick?: () => void
-) {
-  const isActive =
-    page.path === "/" ? pathname === page.path : pathname.startsWith(page.path);
-  return (
-    <li key={index}>
-      <Link href={page.path} onClick={onClick}>
-        <span
-          className={cn(
-            "border rounded-xl border-transparent px-4 py-2 whitespace-nowrap",
-            {
-              "hover:text-white hover:bg-brand-primary": !isActive,
-              "text-brand-primary border rounded-xl border-brand-primary":
-                isActive,
-            }
-          )}
-        >
-          {page.title}
-        </span>
-      </Link>
-    </li>
-  );
-}
-
-type HamburgerProps = {
-  isOpen: boolean;
-  toggleMenu: () => void;
-};
-
-function Hamburger({ isOpen, toggleMenu }: HamburgerProps) {
-  return (
-    <button
-      className="flex md:hidden flex-col justify-center items-end w-11 h-11 p-2 space-y-1.5 rounded-sm hover:bg-brand-stroke-weak active:bg-brand-stroke-weak"
-      aria-label={isOpen ? "Close menu" : "Open menu"}
-      onClick={toggleMenu}
-    >
-      <span
-        className={cn(
-          "w-7 h-1 bg-brand-black rounded-full transition-all duration-300 ease-in-out",
-          { "rotate-45 translate-y-2.5": isOpen }
-        )}
-      />
-      <span
-        className={cn(
-          "w-4 h-1 bg-brand-black rounded-full transition-all duration-300 ease-in-out",
-          { "opacity-0": isOpen }
-        )}
-      />
-      <span
-        className={cn(
-          "w-6 h-1 bg-brand-black rounded-full transition-all duration-300 ease-in-out",
-          { "w-7 -rotate-45 -translate-y-2.5": isOpen }
-        )}
-      />
-    </button>
-  );
-}
 
 export function Navigation() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef(null);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
-
   useClickOutside(navRef, closeMenu);
 
   return (
     <nav
-      className="py-8 border-b border-brand-stroke-weak sticky top-0 z-10 bg-brand-fill"
+      className="py-4 border-b border-gray-200 bg-white sticky top-0 z-10"
       ref={navRef}
     >
-      <div className="container flex justify-between items-center">
-        <Link href="/" onClick={closeMenu}>
-          <Logo className="text-2xl" />
+      <div className="container flex justify-between items-center px-4 md:px-8">
+        {/* Logo */}
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="Cayenne Car Rental"
+            width={150}
+            height={50}
+          />
         </Link>
 
-        {/* Hidden on mobile */}
-        <ul className="hidden md:flex justify-between space-x-4 text-sm uppercase text-brand-text-strong">
-          {pages.map((page, index) => processPage(page, index, pathname))}
+        {/* Desktop Navigation */}
+        <ul className="hidden md:flex space-x-8 text-sm text-gray-900">
+          {pages.map(({ title, path }, index) => (
+            <li key={index}>
+              <Link
+                href={path}
+                className={cn("hover:text-orange-500", {
+                  "text-orange-700": pathname === path,
+                })}
+              >
+                {title}
+              </Link>
+            </li>
+          ))}
         </ul>
 
-        {/* Visible on mobile */}
-        <Hamburger isOpen={isMenuOpen} toggleMenu={toggleMenu} />
-        <ul
-          className={cn(
-            "flex md:hidden flex-col absolute top-full left-0 items-center w-full bg-brand-fill py-6 space-y-6 text-sm uppercase text-brand-text-strong border-b border-brand-stroke-weak",
-            { hidden: !isMenuOpen }
-          )}
-        >
-          {pages.map((page, index) =>
-            processPage(page, index, pathname, closeMenu)
-          )}
-        </ul>
+        {/* Auth Links (Always Visible) */}
+        <div className="flex space-x-4 items-center">
+          <Link href="/login" className="text-green-600 hover:text-green-800">
+            Log In
+          </Link>
+          <Link href="/signup" className="text-gray-900 hover:text-gray-600">
+            Sign Up
+          </Link>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 text-black hover:text-gray-600"
+            aria-label="Open menu"
+            onClick={toggleMenu}
+          >
+            ☰
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Dropdown */}
+      {isMenuOpen && (
+        <ul className="md:hidden flex flex-col items-center space-y-4 py-4 bg-white border-t border-gray-200">
+          {pages.map(({ title, path }, index) => (
+            <li key={index}>
+              <Link
+                href={path}
+                className="text-gray-900 hover:text-orange-700 border-b border-gray-200 hover:border-gray-900 px-4 py-2"
+                onClick={closeMenu}
+              >
+                {title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </nav>
   );
 }
