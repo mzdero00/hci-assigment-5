@@ -19,7 +19,7 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s cayenne.",
+    template: " cayenne.",
     default: "Cayenne - Car Rental Service",
   },
   description: "car rental service",
