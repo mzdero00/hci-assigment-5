@@ -14,7 +14,7 @@ export default function Home() {
             {/* Image */}
             <div className="flex-1">
               <Image
-                src="/HeroImage.png"
+                src="/Heroimage.png"
                 alt="Rental Cars"
                 width={500}
                 height={300}
@@ -43,7 +43,7 @@ export default function Home() {
           <section className="flex flex-col md:flex-row items-center gap-8 bg-white p-8 rounded-lg shadow-lg">
             <div className="flex-1">
               <Image
-                src="/map.png"
+                src="/Map.png"
                 alt="Croatia Map"
                 width={500}
                 height={300}
