@@ -9,16 +9,7 @@ type Page = {
 };
 
 // We hardcode pages here, but you could get this information from some external source (e.g. CMS, DB, config file, etc).
-const pages: Page[] = [
-  {
-    title: "Healthcare",
-    path: "/showcase/healthcare",
-  },
-  {
-    title: "Banking",
-    path: "/showcase/banking",
-  },
-];
+const pages: Page[] = [];
 
 function processPage(page: Page, index: number, pathname: string) {
   return (
